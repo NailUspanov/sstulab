@@ -1,0 +1,49 @@
+package env
+
+import (
+	"os"
+	"strconv"
+)
+
+// All variables for project
+var (
+	DbHost        = Getter("DB_HOST", "postgresdb")
+	DbPort        = Getter("DB_PORT", "5432")
+	DbUser        = Getter("DB_USER", "postgres")
+	DbName        = Getter("DB_NAME", "sstulab")
+	DbPassword    = Getter("DB_PASSWORD", "password")
+	DbSslMode     = Getter("DB_SSL_MODE", "disable")
+	DbSslCertPath = Getter("DB_SSL_CERT_PATH", "")
+)
+
+// Getter -
+func Getter(key, defaultValue string) string {
+	env, ok := os.LookupEnv(key)
+	if ok {
+		return env
+	}
+	return defaultValue
+}
+
+// GetterInt -
+func GetterInt(key string, defaultValue int) int {
+	env, ok := os.LookupEnv(key)
+	if ok {
+		res, err := strconv.ParseInt(env, 10, 32)
+		if err == nil {
+			return int(res)
+		}
+	}
+	return defaultValue
+}
+
+func GetterBool(key string, defaultValue bool) bool {
+	env, ok := os.LookupEnv(key)
+	if ok {
+		res, err := strconv.ParseBool(env)
+		if err == nil {
+			return res
+		}
+	}
+	return defaultValue
+}
